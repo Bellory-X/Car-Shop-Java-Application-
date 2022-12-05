@@ -1,6 +1,7 @@
 package com.example.bd_project.dao;
 
 import com.example.bd_project.entity.PaymentType;
+import com.example.bd_project.entity.Spare;
 import org.hibernate.*;
 
 
@@ -52,4 +53,12 @@ public class PaymentTypeDao implements Dao<PaymentType, Integer> {
 
     @Override
     public void close(){}
+
+    @Override
+    public List<PaymentType> search(String param) {
+        String str = String.join(" AND ", param.split(" "));
+        System.out.println("SELECT p FROM PaymentType p WHERE " + str);
+        return session.createQuery("SELECT p FROM PaymentType p WHERE " + str, PaymentType.class)
+                .list();
+    }
 }

@@ -7,8 +7,7 @@ import org.hibernate.Session;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class StatusChangeService implements Service {
     private final StatusChangeDao dao;
@@ -93,5 +92,35 @@ public class StatusChangeService implements Service {
     @Override
     public void closeSession() {
         dao.close();
+    }
+
+    @Override
+    public void searchRecords() {
+        System.out.println("Enter number columns:");
+        Scanner scanner = new Scanner(System.in);
+        int count = scanner.nextInt();
+        if (count == 0)
+            return;
+        if (count < 0 || count > 2) {
+            System.out.println("Invalid number: max number 2");
+            searchRecords();
+            return;
+        }
+        StringJoiner str = new StringJoiner(" ");
+        for (int i = 0; i < count; i++) {
+            String param;
+            System.out.println("Enter column title:");
+            param = scanner.next();
+            System.out.println("Enter value:");
+            param += "='" + scanner.next() + "'";
+            str.add(param);
+        }
+        dao.search(str.toString()).forEach(entry -> {
+            System.out.println("number = " + entry.getNumber());
+            System.out.println("cause = " + entry.getCause());
+            System.out.println("position = " + entry.getPosition());
+            System.out.println("order_date = " + DateParser.getString(entry.getOrder_date()));
+
+        });
     }
 }

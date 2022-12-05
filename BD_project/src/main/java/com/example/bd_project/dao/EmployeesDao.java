@@ -1,6 +1,8 @@
 package com.example.bd_project.dao;
 
 import com.example.bd_project.entity.EmployeesKey;
+import com.example.bd_project.entity.Sellers;
+import com.example.bd_project.entity.Spare;
 import com.example.bd_project.util.HibernateUtil;
 import com.example.bd_project.entity.Employees;
 import org.hibernate.Session;
@@ -56,4 +58,12 @@ public class EmployeesDao implements Dao<Employees, EmployeesKey> {
 
     @Override
     public void close(){}
+
+    @Override
+    public List<Employees> search(String param) {
+        String str = String.join(" AND ", param.split(" "));
+        System.out.println("SELECT p FROM PaymentType p WHERE " + str);
+        return session.createQuery("SELECT p FROM Employees p WHERE " + str, Employees.class)
+                .list();
+    }
 }

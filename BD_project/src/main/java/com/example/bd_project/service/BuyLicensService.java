@@ -8,8 +8,7 @@ import org.hibernate.Session;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class BuyLicensService implements Service {
     private final BuyLicensDao dao;
@@ -94,5 +93,34 @@ public class BuyLicensService implements Service {
     @Override
     public void closeSession() {
         dao.close();
+    }
+
+    @Override
+    public void searchRecords() {
+        System.out.println("Enter number columns:");
+        Scanner scanner = new Scanner(System.in);
+        int count = scanner.nextInt();
+        if (count == 0)
+            return;
+        if (count < 0 || count > 2) {
+            System.out.println("Invalid number: max number 2");
+            searchRecords();
+            return;
+        }
+        StringJoiner str = new StringJoiner(" ");
+        for (int i = 0; i < count; i++) {
+            String param;
+            System.out.println("Enter column title:");
+            param = scanner.next();
+            System.out.println("Enter value:");
+            param += "='" + scanner.next() + "'";
+            str.add(param);
+        }
+        dao.search(str.toString()).forEach(entry -> {
+            System.out.println("id_buy_license = " + entry.getId_buy_license());
+            System.out.println("name = " + entry.getName());
+            System.out.println("issue_date = " + DateParser.getString(entry.getIssue_date()));
+            System.out.println("employee_full_name = " + entry.getEmployee_full_name());
+        });
     }
 }

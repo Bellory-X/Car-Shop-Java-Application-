@@ -28,7 +28,7 @@ public class CarShop {
 
     public void run() throws IOException, ParseException {
         while (true) {
-            System.out.println(String.join("Select table or exit:\n",
+            System.out.println(String.join("\nSelect table or exit:\n",
                     "0. exit\n",
                     "1. Buyers\n",
                     "2. BuyLicens\n",
@@ -37,7 +37,7 @@ public class CarShop {
                     "5. PaymentType\n",
                     "6. Sellers\n",
                     "7. Spare\n",
-                    "8. StatusChange"));
+                    "8. StatusChange\n"));
             Scanner scanner = new Scanner(System.in);
             int count = scanner.nextInt();
             if (count == 0) {
@@ -54,15 +54,16 @@ public class CarShop {
     }
 
     private void workService(Service service) throws IOException, ParseException {
-        System.out.println(String.join("Select event:\n",
+        System.out.println(String.join("\nSelect event:\n",
                 "0. exit\n",
                 "1. Add\n",
                 "2. Delete\n",
                 "3. Show\n",
-                "4. Change"));
+                "4. Change\n",
+                "5. Search\n"));
         Scanner scanner = new Scanner(System.in);
         int count = scanner.nextInt();
-        if (count < 0 || count > 4) {
+        if (count < 0 || count > 5) {
             System.out.println("Incorrect number");
             run();
             return;
@@ -72,6 +73,7 @@ public class CarShop {
             case 2 -> service.deleteRecord();
             case 3 -> service.showRecord();
             case 4 -> service.changeRecord();
+            case 5 -> service.searchRecords();
             default -> {}
         }
     }

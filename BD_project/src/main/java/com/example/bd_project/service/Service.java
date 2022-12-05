@@ -9,4 +9,5 @@ public interface Service {
     void showRecord();
     void changeRecord() throws IOException, ParseException;
     void closeSession();
+    void searchRecords();
 }

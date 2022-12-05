@@ -8,9 +8,7 @@ import org.hibernate.Session;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class EmployeesService implements Service {
     private final EmployeesDao dao;
@@ -133,5 +131,38 @@ public class EmployeesService implements Service {
     @Override
     public void closeSession() {
         dao.close();
+    }
+
+    @Override
+    public void searchRecords() {
+        System.out.println("Enter number columns:");
+        Scanner scanner = new Scanner(System.in);
+        int count = scanner.nextInt();
+        if (count == 0)
+            return;
+        if (count < 0 || count > 2) {
+            System.out.println("Invalid number: max number 2");
+            searchRecords();
+            return;
+        }
+        StringJoiner str = new StringJoiner(" ");
+        for (int i = 0; i < count; i++) {
+            String param;
+            System.out.println("Enter column title:");
+            param = scanner.next();
+            System.out.println("Enter value:");
+            param += "='" + scanner.next() + "'";
+            str.add(param);
+        }
+        dao.search(str.toString()).forEach(entry -> {
+            System.out.println("second_name = " + entry.getKey().getSecond_name());
+            System.out.println("first_name = " + entry.getKey().getFirst_name());
+            System.out.println("patronymic = " + entry.getKey().getPatronymic());
+            System.out.println("birthday = " + DateParser.getString(entry.getKey().getBirthday()));
+
+            System.out.println("position = " + entry.getPosition());
+            System.out.println("salary = " + entry.getSalary());
+            System.out.println("change_status = " + entry.getChange_status());
+        });
     }
 }

@@ -1,10 +1,13 @@
 package com.example.bd_project.dao;
 
+import com.example.bd_project.entity.Sellers;
 import com.example.bd_project.util.HibernateUtil;
 import com.example.bd_project.entity.StatusChange;
 import org.hibernate.Session;
 
+import javax.persistence.Query;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StatusChangeDao implements Dao<StatusChange, Integer> {
     private final Session session;
@@ -57,4 +60,12 @@ public class StatusChangeDao implements Dao<StatusChange, Integer> {
 
     @Override
     public void close(){}
+
+    @Override
+    public List<StatusChange> search(String param) {
+        String str = String.join(" AND ", param.split(" "));
+        System.out.println("SELECT p FROM PaymentType p WHERE " + str);
+        return session.createQuery("SELECT p FROM StatusChange p WHERE " + str, StatusChange.class)
+                .list();
+    }
 }

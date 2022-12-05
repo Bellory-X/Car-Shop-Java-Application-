@@ -9,4 +9,5 @@ interface Dao<T, V> {
     void delete(V entity);
     void change(T entity, V key);
     void close();
+    List<T> search(String param);
 }

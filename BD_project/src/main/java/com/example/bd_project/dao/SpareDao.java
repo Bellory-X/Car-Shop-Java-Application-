@@ -1,6 +1,8 @@
 package com.example.bd_project.dao;
 
+import com.example.bd_project.entity.Sellers;
 import com.example.bd_project.entity.SpareKey;
+import com.example.bd_project.entity.StatusChange;
 import com.example.bd_project.util.HibernateUtil;
 import com.example.bd_project.entity.Spare;
 import org.hibernate.Session;
@@ -53,4 +55,12 @@ public class SpareDao implements Dao<Spare, SpareKey> {
 
     @Override
     public void close(){}
+
+    @Override
+    public List<Spare> search(String param) {
+        String str = String.join(" AND ", param.split(" "));
+        System.out.println("SELECT p FROM PaymentType p WHERE " + str);
+        return session.createQuery("SELECT p FROM Spare p WHERE " + str, Spare.class)
+                .list();
+    }
 }

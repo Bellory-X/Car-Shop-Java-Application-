@@ -7,9 +7,7 @@ import org.hibernate.Session;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class CarService implements Service {
     private final CarDao dao;
@@ -203,5 +201,45 @@ public class CarService implements Service {
     @Override
     public void closeSession() {
         dao.close();
+    }
+
+    @Override
+    public void searchRecords() {
+        System.out.println("Enter number columns:");
+        Scanner scanner = new Scanner(System.in);
+        int count = scanner.nextInt();
+        if (count == 0)
+            return;
+        if (count < 0 || count > 2) {
+            System.out.println("Invalid number: max number 2");
+            searchRecords();
+            return;
+        }
+        StringJoiner str = new StringJoiner(" ");
+        for (int i = 0; i < count; i++) {
+            String param;
+            System.out.println("Enter column title:");
+            param = scanner.next();
+            System.out.println("Enter value:");
+            param += "='" + scanner.next() + "'";
+            str.add(param);
+        }
+        dao.search(str.toString()).forEach(entry -> {
+            System.out.println("license_plate = " + entry.getLicense_plate());
+            System.out.println("model = " + entry.getModel());
+            System.out.println("type = " + entry.getType());
+            System.out.println("color = " + entry.getColor());
+            System.out.println("engine_number = " + entry.getEngine_number());
+            System.out.println("car_body_number = " + entry.getCar_body_number());
+            System.out.println("chassis_number = " + entry.getChassis_number());
+            System.out.println("release_date = " + DateParser.getString(entry.getRelease_date()));
+            System.out.println("car_mileage = " + entry.getCar_mileage());
+            System.out.println("release_price = " + entry.getRelease_price());
+            System.out.println("sale_price = " + entry.getSale_price());
+            System.out.println("buy_price = " + entry.getBuy_price());
+            System.out.println("number_tech_cond = " + entry.getNumber_tech_cond());
+            System.out.println("date_tech_cond = " + DateParser.getString(entry.getDate_tech_cond()));
+            System.out.println("expert_full_name = " + entry.getExpert_full_name());
+        });
     }
 }

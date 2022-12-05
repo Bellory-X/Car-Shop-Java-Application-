@@ -5,8 +5,7 @@ import com.example.bd_project.entity.PaymentType;
 import org.hibernate.Session;
 
 
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class PaymentTypeService implements Service {
     private final PaymentTypeDao dao;
@@ -74,6 +73,33 @@ public class PaymentTypeService implements Service {
     @Override
     public void closeSession() {
         dao.close();
+    }
+
+    @Override
+    public void searchRecords() {
+        System.out.println("Enter number columns:");
+        Scanner scanner = new Scanner(System.in);
+        int count = scanner.nextInt();
+        if (count == 0)
+            return;
+        if (count < 0 || count > 2) {
+            System.out.println("Invalid number: max number 2");
+            searchRecords();
+            return;
+        }
+        StringJoiner str = new StringJoiner(" ");
+        for (int i = 0; i < count; i++) {
+            String param;
+            System.out.println("Enter column title:");
+            param = scanner.next();
+            System.out.println("Enter value:");
+            param += "='" + scanner.next() + "'";
+            str.add(param);
+        }
+        dao.search(str.toString()).forEach(entry -> {
+            System.out.println("payment_id = " + entry.getPayment_id());
+            System.out.println("payment_name = " + entry.getPayment_name());
+        });
     }
 }
 

@@ -5,9 +5,7 @@ import com.example.bd_project.entity.Spare;
 import com.example.bd_project.entity.SpareKey;
 import org.hibernate.Session;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class SpareService implements Service {
     private final SpareDao dao;
@@ -102,5 +100,35 @@ public class SpareService implements Service {
     @Override
     public void closeSession() {
         dao.close();
+    }
+
+    @Override
+    public void searchRecords() {
+        System.out.println("Enter number columns:");
+        Scanner scanner = new Scanner(System.in);
+        int count = scanner.nextInt();
+        if (count == 0)
+            return;
+        if (count < 0 || count > 2) {
+            System.out.println("Invalid number: max number 2");
+            searchRecords();
+            return;
+        }
+        StringJoiner str = new StringJoiner(" ");
+        for (int i = 0; i < count; i++) {
+            String param;
+            System.out.println("Enter column title:");
+            param = scanner.next();
+            System.out.println("Enter value:");
+            param += "='" + scanner.next() + "'";
+            str.add(param);
+        }
+        dao.search(str.toString()).forEach(entry -> {
+            System.out.println("name = " + entry.getKey().getName());
+            System.out.println("model = " + entry.getKey().getModel());
+            System.out.println("type = " + entry.getKey().getType());
+
+            System.out.println("stash_count = " + entry.getStash_count());
+        });
     }
 }

@@ -1,5 +1,7 @@
 package com.example.bd_project.dao;
 
+import com.example.bd_project.entity.Sellers;
+import com.example.bd_project.entity.Spare;
 import com.example.bd_project.util.HibernateUtil;
 import com.example.bd_project.entity.Buyers;
 import org.hibernate.Session;
@@ -56,6 +58,13 @@ public class BuyersDao implements Dao<Buyers, Long> {
     }
 
     @Override
-    public void close() {
+    public void close() {}
+
+    @Override
+    public List<Buyers> search(String param) {
+        String str = String.join(" AND ", param.split(" "));
+        System.out.println("SELECT p FROM PaymentType p WHERE " + str);
+        return session.createQuery("SELECT p FROM Buyers p WHERE " + str, Buyers.class)
+                .list();
     }
 }
