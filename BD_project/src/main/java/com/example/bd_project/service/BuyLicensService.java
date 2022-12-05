@@ -1,9 +1,7 @@
-package service;
+package com.example.bd_project.service;
 
 import com.example.bd_project.dao.BuyLicensDao;
-import com.example.bd_project.dao.BuyersDao;
 import com.example.bd_project.entity.BuyLicens;
-import com.example.bd_project.entity.Buyers;
 import com.example.bd_project.util.DateParser;
 
 import java.io.IOException;

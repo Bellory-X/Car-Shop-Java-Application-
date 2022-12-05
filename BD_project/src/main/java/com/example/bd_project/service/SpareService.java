@@ -1,4 +1,4 @@
-package service;
+package com.example.bd_project.service;
 
 import com.example.bd_project.dao.SpareDao;
 import com.example.bd_project.entity.Spare;

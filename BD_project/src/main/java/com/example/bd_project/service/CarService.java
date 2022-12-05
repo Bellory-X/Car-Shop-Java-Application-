@@ -1,8 +1,6 @@
-package service;
+package com.example.bd_project.service;
 
-import com.example.bd_project.dao.BuyLicensDao;
 import com.example.bd_project.dao.CarDao;
-import com.example.bd_project.entity.BuyLicens;
 import com.example.bd_project.entity.Car;
 import com.example.bd_project.util.DateParser;
 
