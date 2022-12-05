@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+
+        <!-- Connection settings -->
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/CarShop</property>
+        <property name="hibernate.connection.username">admin</property>
+        <property name="hibernate.connection.password">admin</property>
+
+<!--        <property name="hibernate.connection.characterEncoding">utf8</property>-->
+
+        <!-- SQL dialect -->
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQL9Dialect</property>
+
+        <!-- Print executed SQL to stdout -->
+        <property name="show_sql">false</property>
+
+<!--        <property name="hibernate.format_sql">false</property>-->
+
+<!--        <property name="hibernate.current_session_context_class">thread</property>-->
+
+        <mapping class="com.example.bd_project.entity.Buyers"/>
+        <mapping class="com.example.bd_project.entity.BuyLicens"/>
+        <mapping class="com.example.bd_project.entity.Car"/>
+        <mapping class="com.example.bd_project.entity.Employees"/>
+        <mapping class="com.example.bd_project.entity.PaymentType"/>
+        <mapping class="com.example.bd_project.entity.Sellers"/>
+        <mapping class="com.example.bd_project.entity.Spare"/>
+        <mapping class="com.example.bd_project.entity.StatusChange"/>
+        <!-- Drop and re-create all database on startup -->
+<!--        <property name="hibernate.hbm2ddl.auto">create-drop</property>-->
+
+<!--        &lt;!&ndash; Annotated entity classes &ndash;&gt;-->
+<!--        <mapping class="com.jvmhub.tutorial.entity.AppUser"/>-->
+
+    </session-factory>
+</hibernate-configuration>
