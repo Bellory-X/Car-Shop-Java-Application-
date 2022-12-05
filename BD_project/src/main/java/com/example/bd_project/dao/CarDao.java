@@ -9,8 +9,8 @@ import java.util.List;
 public class CarDao implements Dao<Car, String> {
     private final Session session;
 
-    public CarDao() {
-        session = HibernateUtil.getSessionFactory().openSession();
+    public CarDao(Session session) {
+        this.session = session;
     }
 
     @Override
@@ -77,6 +77,6 @@ public class CarDao implements Dao<Car, String> {
 
     @Override
     public void close() {
-        session.close();
+
     }
 }

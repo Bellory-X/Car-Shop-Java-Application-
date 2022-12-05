@@ -2,6 +2,7 @@ package com.example.bd_project.service;
 
 import com.example.bd_project.dao.PaymentTypeDao;
 import com.example.bd_project.entity.PaymentType;
+import org.hibernate.Session;
 
 
 import java.util.Optional;
@@ -10,8 +11,8 @@ import java.util.Scanner;
 public class PaymentTypeService implements Service {
     private final PaymentTypeDao dao;
 
-    public PaymentTypeService() {
-        dao = new PaymentTypeDao();
+    public PaymentTypeService(Session session) {
+        dao = new PaymentTypeDao(session);
     }
 
     @Override
@@ -45,6 +46,7 @@ public class PaymentTypeService implements Service {
     @Override
     public void changeRecord() {
         Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter payment_id(int):");
         int key = scanner.nextInt();
         Optional<PaymentType> paymentType = dao.show()
                 .stream()
@@ -66,7 +68,7 @@ public class PaymentTypeService implements Service {
         if (check) {
             paymentType.get().setPayment_name(scanner.next());
         }
-
+        dao.change(paymentType.get(), key);
     }
 
     @Override

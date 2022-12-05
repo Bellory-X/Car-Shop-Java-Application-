@@ -3,6 +3,7 @@ package com.example.bd_project.service;
 import com.example.bd_project.dao.BuyersDao;
 import com.example.bd_project.entity.Buyers;
 import com.example.bd_project.util.DateParser;
+import org.hibernate.Session;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -12,8 +13,8 @@ import java.util.Scanner;
 public class BuyersService implements Service {
     private final BuyersDao dao;
 
-    public BuyersService() {
-        dao = new BuyersDao();
+    public BuyersService(Session session) {
+        dao = new BuyersDao(session);
     }
 
     @Override
@@ -94,6 +95,7 @@ public class BuyersService implements Service {
         if (check) {
             buyers.get().setPayment_type(scanner.nextInt());
         }
+        dao.change(buyers.get(), key);
     }
 
     @Override

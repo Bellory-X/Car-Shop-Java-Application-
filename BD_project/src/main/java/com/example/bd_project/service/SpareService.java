@@ -3,6 +3,7 @@ package com.example.bd_project.service;
 import com.example.bd_project.dao.SpareDao;
 import com.example.bd_project.entity.Spare;
 import com.example.bd_project.entity.SpareKey;
+import org.hibernate.Session;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -11,8 +12,8 @@ import java.util.Scanner;
 public class SpareService implements Service {
     private final SpareDao dao;
 
-    public SpareService() {
-        dao = new SpareDao();
+    public SpareService(Session session) {
+        dao = new SpareDao(session);
     }
 
     @Override
@@ -61,40 +62,41 @@ public class SpareService implements Service {
     public void changeRecord() {
 
         SpareKey key = readKey();
-        Optional<Spare> employees = dao.show()
+        Optional<Spare> spare = dao.show()
                 .stream()
                 .filter(entry -> Objects.equals(entry.getKey().getName(), key.getName()) &&
                         Objects.equals(entry.getKey().getModel(), key.getModel()) &&
                         Objects.equals(entry.getKey().getType(), key.getType()))
                 .findAny();
-        if (employees.isEmpty()) {
+        if (spare.isEmpty()) {
             System.out.println("Invalid key");
             changeRecord();
             return;
         }
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Change name = " + employees.get().getKey().getName() + "?");
+        System.out.println("Change name = " + spare.get().getKey().getName() + "?");
         boolean check = scanner.nextBoolean();
         if (check) {
-            employees.get().getKey().setName(scanner.next());
+            spare.get().getKey().setName(scanner.next());
         }
-        System.out.println("Change model = " + employees.get().getKey().getModel() + "?");
+        System.out.println("Change model = " + spare.get().getKey().getModel() + "?");
         check = scanner.nextBoolean();
         if (check) {
-            employees.get().getKey().setModel(scanner.next());
+            spare.get().getKey().setModel(scanner.next());
         }
-        System.out.println("Change type = " + employees.get().getKey().getType() + "?");
+        System.out.println("Change type = " + spare.get().getKey().getType() + "?");
         check = scanner.nextBoolean();
         if (check) {
-            employees.get().getKey().setType(scanner.next());
+            spare.get().getKey().setType(scanner.next());
         }
 
-        System.out.println("Change stash_count = " + employees.get().getStash_count() + "?");
+        System.out.println("Change stash_count = " + spare.get().getStash_count() + "?");
         check = scanner.nextBoolean();
         if (check) {
-            employees.get().setStash_count(scanner.nextInt());
+            spare.get().setStash_count(scanner.nextInt());
         }
+        dao.change(spare.get(), key);
     }
 
     @Override

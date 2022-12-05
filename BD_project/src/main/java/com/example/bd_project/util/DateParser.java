@@ -14,9 +14,9 @@ public class DateParser {
     public static Date readDate() throws IOException, ParseException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String str = reader.readLine();
-        SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-        return s.parse(str);
+        return formatter.parse(str);
     }
 
     public static String getString(Date date) {

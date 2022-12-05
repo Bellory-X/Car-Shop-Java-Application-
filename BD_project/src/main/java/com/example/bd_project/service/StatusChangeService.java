@@ -3,6 +3,7 @@ package com.example.bd_project.service;
 import com.example.bd_project.dao.StatusChangeDao;
 import com.example.bd_project.entity.StatusChange;
 import com.example.bd_project.util.DateParser;
+import org.hibernate.Session;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -12,8 +13,8 @@ import java.util.Scanner;
 public class StatusChangeService implements Service {
     private final StatusChangeDao dao;
 
-    public StatusChangeService() {
-        dao = new StatusChangeDao();
+    public StatusChangeService(Session session) {
+        dao = new StatusChangeDao(session);
     }
 
     @Override
@@ -56,36 +57,37 @@ public class StatusChangeService implements Service {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter number(int):");
         int key = scanner.nextInt();
-        Optional<StatusChange> employees = dao.show()
+        Optional<StatusChange> statusChange = dao.show()
                 .stream()
                 .filter(entry -> entry.getNumber() == key)
                 .findAny();
-        if (employees.isEmpty()) {
+        if (statusChange.isEmpty()) {
             System.out.println("Invalid key");
             changeRecord();
             return;
         }
 
-        System.out.println("Change number = " + employees.get().getNumber() + "?");
+        System.out.println("Change number = " + statusChange.get().getNumber() + "?");
         boolean check = scanner.nextBoolean();
         if (check) {
-            employees.get().setNumber(scanner.nextInt());
+            statusChange.get().setNumber(scanner.nextInt());
         }
-        System.out.println("Change cause = " + employees.get().getCause() + "?");
+        System.out.println("Change cause = " + statusChange.get().getCause() + "?");
         check = scanner.nextBoolean();
         if (check) {
-            employees.get().setCause(scanner.next());
+            statusChange.get().setCause(scanner.next());
         }
-        System.out.println("Change position = " + employees.get().getPosition() + "?");
+        System.out.println("Change position = " + statusChange.get().getPosition() + "?");
         check = scanner.nextBoolean();
         if (check) {
-            employees.get().setPosition(scanner.next());
+            statusChange.get().setPosition(scanner.next());
         }
-        System.out.println("Change order_date = " + DateParser.getString(employees.get().getOrder_date()) + "?");
+        System.out.println("Change order_date = " + DateParser.getString(statusChange.get().getOrder_date()) + "?");
         check = scanner.nextBoolean();
         if (check) {
-            employees.get().setOrder_date(DateParser.readDate());
+            statusChange.get().setOrder_date(DateParser.readDate());
         }
+        dao.change(statusChange.get(), key);
     }
 
     @Override

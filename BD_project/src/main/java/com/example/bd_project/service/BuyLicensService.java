@@ -2,7 +2,9 @@ package com.example.bd_project.service;
 
 import com.example.bd_project.dao.BuyLicensDao;
 import com.example.bd_project.entity.BuyLicens;
+import com.example.bd_project.entity.Sellers;
 import com.example.bd_project.util.DateParser;
+import org.hibernate.Session;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -12,8 +14,8 @@ import java.util.Scanner;
 public class BuyLicensService implements Service {
     private final BuyLicensDao dao;
 
-    public BuyLicensService() {
-        dao = new BuyLicensDao();
+    public BuyLicensService(Session session) {
+        dao = new BuyLicensDao(session);
     }
 
     @Override
@@ -86,6 +88,7 @@ public class BuyLicensService implements Service {
         if (check) {
             buyLicens.get().setEmployee_full_name(scanner.next());
         }
+        dao.change(buyLicens.get(), key);
     }
 
     @Override

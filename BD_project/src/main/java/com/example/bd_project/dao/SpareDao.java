@@ -10,8 +10,8 @@ import java.util.List;
 public class SpareDao implements Dao<Spare, SpareKey> {
     private final Session session;
 
-    public SpareDao() {
-        session = HibernateUtil.getSessionFactory().openSession();
+    public SpareDao(Session session) {
+        this.session = session;
     }
 
     @Override
@@ -52,7 +52,5 @@ public class SpareDao implements Dao<Spare, SpareKey> {
     }
 
     @Override
-    public void close() {
-        session.close();
-    }
+    public void close(){}
 }

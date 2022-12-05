@@ -9,8 +9,8 @@ import java.util.List;
 public class StatusChangeDao implements Dao<StatusChange, Integer> {
     private final Session session;
 
-    public StatusChangeDao() {
-        session = HibernateUtil.getSessionFactory().openSession();
+    public StatusChangeDao(Session session) {
+        this.session = session;
     }
 
     @Override
@@ -56,7 +56,5 @@ public class StatusChangeDao implements Dao<StatusChange, Integer> {
     }
 
     @Override
-    public void close() {
-        session.close();
-    }
+    public void close(){}
 }

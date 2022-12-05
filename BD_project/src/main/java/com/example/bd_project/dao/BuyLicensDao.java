@@ -9,8 +9,8 @@ import java.util.List;
 public class BuyLicensDao implements Dao<BuyLicens, Long> {
     private final Session session;
 
-    public BuyLicensDao() {
-        session = HibernateUtil.getSessionFactory().openSession();
+    public BuyLicensDao(Session session) {
+        this.session = session;
     }
 
     @Override
@@ -54,6 +54,6 @@ public class BuyLicensDao implements Dao<BuyLicens, Long> {
     }
 
     public void close() {
-        session.close();
+
     }
 }

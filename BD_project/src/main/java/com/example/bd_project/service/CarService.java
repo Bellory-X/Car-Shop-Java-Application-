@@ -3,6 +3,7 @@ package com.example.bd_project.service;
 import com.example.bd_project.dao.CarDao;
 import com.example.bd_project.entity.Car;
 import com.example.bd_project.util.DateParser;
+import org.hibernate.Session;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -13,8 +14,8 @@ import java.util.Scanner;
 public class CarService implements Service {
     private final CarDao dao;
 
-    public CarService() {
-        dao = new CarDao();
+    public CarService(Session session) {
+        dao = new CarDao(session);
     }
 
     @Override
@@ -196,6 +197,7 @@ public class CarService implements Service {
         if (check) {
             car.get().setExpert_full_name(scanner.next());
         }
+        dao.change(car.get(), key);
     }
 
     @Override

@@ -10,8 +10,8 @@ import java.util.List;
 public class EmployeesDao implements Dao<Employees, EmployeesKey> {
     private final Session session;
 
-    public EmployeesDao() {
-        session = HibernateUtil.getSessionFactory().openSession();
+    public EmployeesDao(Session session) {
+        this.session = session;
     }
 
     @Override
@@ -55,7 +55,5 @@ public class EmployeesDao implements Dao<Employees, EmployeesKey> {
     }
 
     @Override
-    public void close() {
-        session.close();
-    }
+    public void close(){}
 }

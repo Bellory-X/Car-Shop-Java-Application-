@@ -4,6 +4,7 @@ import com.example.bd_project.dao.EmployeesDao;
 import com.example.bd_project.entity.Employees;
 import com.example.bd_project.entity.EmployeesKey;
 import com.example.bd_project.util.DateParser;
+import org.hibernate.Session;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -14,8 +15,8 @@ import java.util.Scanner;
 public class EmployeesService implements Service {
     private final EmployeesDao dao;
 
-    public EmployeesService() {
-        dao = new EmployeesDao();
+    public EmployeesService(Session session) {
+        dao = new EmployeesDao(session);
     }
 
     @Override
@@ -75,16 +76,19 @@ public class EmployeesService implements Service {
         EmployeesKey key = readKey();
         Optional<Employees> employees = dao.show()
                 .stream()
-                .filter(entry -> Objects.equals(entry.getKey().getSecond_name(), key.getSecond_name()) &&
-                        Objects.equals(entry.getKey().getFirst_name(), key.getFirst_name()) &&
-                        Objects.equals(entry.getKey().getPatronymic(), key.getPatronymic()) &&
-                        Objects.equals(entry.getKey().getBirthday(), key.getBirthday()))
+                .filter(entry -> entry.getKey().getSecond_name().equals(key.getSecond_name()) &&
+                        entry.getKey().getFirst_name().equals(key.getFirst_name()) &&
+                        entry.getKey().getPatronymic().equals(key.getPatronymic()) &&
+                        entry.getKey().getBirthday().getTime() == key.getBirthday().getTime())
                 .findAny();
         if (employees.isEmpty()) {
             System.out.println("Invalid key");
             changeRecord();
             return;
         }
+
+        System.out.println(employees.get().getKey().getBirthday());
+        System.out.println(key.getBirthday());
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Change second_name = " + employees.get().getKey().getSecond_name() + "?");
@@ -123,6 +127,7 @@ public class EmployeesService implements Service {
         if (check) {
             employees.get().setChange_status(scanner.nextInt());
         }
+        dao.change(employees.get(), key);
     }
 
     @Override

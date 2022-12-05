@@ -1,6 +1,5 @@
 package com.example.bd_project.dao;
 
-import com.example.bd_project.util.HibernateUtil;
 import com.example.bd_project.entity.PaymentType;
 import org.hibernate.*;
 
@@ -10,8 +9,8 @@ import java.util.List;
 public class PaymentTypeDao implements Dao<PaymentType, Integer> {
     private final Session session;
 
-    public PaymentTypeDao() {
-        session = HibernateUtil.getSessionFactory().openSession();
+    public PaymentTypeDao(Session session) {
+        this.session = session;
     }
 
     @Override
@@ -52,7 +51,5 @@ public class PaymentTypeDao implements Dao<PaymentType, Integer> {
     }
 
     @Override
-    public void close() {
-        session.close();
-    }
+    public void close(){}
 }

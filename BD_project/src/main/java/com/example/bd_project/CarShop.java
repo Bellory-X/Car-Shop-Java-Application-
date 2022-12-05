@@ -2,6 +2,8 @@ package com.example.bd_project;
 
 
 import com.example.bd_project.service.*;
+import com.example.bd_project.util.HibernateUtil;
+import org.hibernate.Session;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -10,19 +12,21 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class CarShop {
-    private final Map<Integer, Service> serviceMap = new HashMap<>();;
+    private final Map<Integer, Service> serviceMap = new HashMap<>();
+    private final Session session;
     public CarShop() {
-        serviceMap.put(1, new BuyersService());
-        serviceMap.put(2, new BuyLicensService());
-        serviceMap.put(3, new CarService());
-        serviceMap.put(4, new EmployeesService());
-        serviceMap.put(5, new PaymentTypeService());
-        serviceMap.put(6, new SellersService());
-        serviceMap.put(7, new SpareService());
-        serviceMap.put(8, new StatusChangeService());
+        session = HibernateUtil.getSessionFactory().openSession();
+        serviceMap.put(1, new BuyersService(session));
+        serviceMap.put(2, new BuyLicensService(session));
+        serviceMap.put(3, new CarService(session));
+        serviceMap.put(4, new EmployeesService(session));
+        serviceMap.put(5, new PaymentTypeService(session));
+        serviceMap.put(6, new SellersService(session));
+        serviceMap.put(7, new SpareService(session));
+        serviceMap.put(8, new StatusChangeService(session));
     }
 
-    void run() throws IOException, ParseException {
+    public void run() throws IOException, ParseException {
         while (true) {
             System.out.println(String.join("Select table or exit:\n",
                     "0. exit\n",
@@ -37,6 +41,7 @@ public class CarShop {
             Scanner scanner = new Scanner(System.in);
             int count = scanner.nextInt();
             if (count == 0) {
+                close();
                 return;
             }
             if (count < 0 || count > 8) {
@@ -48,7 +53,7 @@ public class CarShop {
         }
     }
 
-    void workService(Service service) throws IOException, ParseException {
+    private void workService(Service service) throws IOException, ParseException {
         System.out.println(String.join("Select event:\n",
                 "0. exit\n",
                 "1. Add\n",
@@ -69,5 +74,10 @@ public class CarShop {
             case 4 -> service.changeRecord();
             default -> {}
         }
+    }
+
+    private void close() {
+        session.close();
+        serviceMap.clear();
     }
 }
